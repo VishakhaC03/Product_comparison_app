@@ -1,0 +1,589 @@
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  position: relative;
+
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
+
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .framework,
+  .vite {
+    position: absolute;
+  }
+
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+/*import {
+  useEffect,
+  useState,
+} from "react";
+
+import ProductCard from "./components/ProductCard";
+import ComparisonTable from "./components/ComparisonTable";
+import SearchBar from "./components/SearchBar";
+import CategoryFilter from "./components/CategoryFilter";
+
+import {
+  fetchProducts,
+  searchProducts,
+} from "./services/api";
+
+function App() {
+
+
+  // Products from API
+  const [products, setProducts] =
+    useState([]);
+
+  // Selected comparison products
+  const [
+    selectedProducts,
+    setSelectedProducts,
+  ] = useState([]);
+
+  // Search term
+  const [searchTerm, setSearchTerm] =
+    useState("");
+
+  //Filter Products into categories
+  const [
+  selectedCategory,
+  setSelectedCategory,
+] = useState("");
+
+     const categories = [
+  ...new Set(
+    products.map(
+      (product) => product.category
+    )
+  ),
+];
+
+
+
+  // FILTERING LOGIC
+  const filteredProducts =
+  products.filter((product) => {
+
+    // Search filter
+    const matchesSearch =
+      product.title
+        ?.toLowerCase()
+        .includes(
+          searchTerm.toLowerCase()
+        );
+
+    // Category filter
+    const matchesCategory =
+      selectedCategory === ""
+        ? true
+        : product.category ===
+          selectedCategory;
+
+    return (
+      matchesSearch &&
+      matchesCategory
+    );
+  });
+
+    console.log(products);
+    console.log(filteredProducts);
+
+  // useEffect()
+  useEffect(() => {
+
+  }, []);
+
+  return (
+
+    <div>
+
+      {filteredProducts.map(
+        (product) => (
+
+          <ProductCard />
+
+        )
+      )}
+
+    </div>
+  );
+
+  // Loading state
+  const [loading, setLoading] =
+    useState(false);
+
+  // Error state
+  const [error, setError] =
+    useState("");
+
+  const [compareError, setCompareError] =
+  useState("");
+
+  // Initial API fetch
+  useEffect(() => {
+
+    loadProducts();
+
+  }, []);
+
+  // Load all products
+  const loadProducts = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const data =
+        await fetchProducts();
+
+      setProducts(data);
+
+      setError("");
+
+    } catch (err) {
+
+      setError(
+        "Failed to fetch products"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+  // Search products
+  useEffect(() => {
+
+    const delaySearch =
+      setTimeout(async () => {
+
+        try {
+
+          setLoading(true);
+
+          // Empty search
+          if (
+            searchTerm.trim() === ""
+          ) {
+
+            const data =
+              await fetchProducts();
+
+            setProducts(data);
+
+          } else {
+
+            const data =
+              await searchProducts(
+                searchTerm
+              );
+
+            setProducts(data);
+          }
+
+        } catch (err) {
+
+          setError(
+            "Search failed"
+          );
+
+        } finally {
+
+          setLoading(false);
+        }
+
+      }, 500);
+
+
+    return () =>
+      clearTimeout(delaySearch);
+
+  }, [searchTerm]);
+
+  // Add product to comparison
+  /*const addToCompare = (product) => {
+
+    // Prevent duplicates
+    const exists =
+      selectedProducts.find(
+        (item) =>
+          item.id === product.id
+      );
+
+    if (exists) return;
+
+    setSelectedProducts([
+      ...selectedProducts,
+      product,
+    ]);
+  };
+
+  const addToCompare = (product) => {
+
+  setCompareError("");
+
+  if (selectedProducts.length === 0) {
+
+    setSelectedProducts([
+      ...selectedProducts,
+      product,
+    ]);
+
+    return;
+  }
+
+  const existingCategory =
+    selectedProducts[0].category;
+
+  if (
+    product.category !==
+    existingCategory
+  ) {
+
+    setCompareError(
+      `Cannot compare ${product.category} with ${existingCategory}`
+    );
+
+    return;
+  }
+
+  const exists =
+    selectedProducts.find(
+      (item) =>
+        item.id === product.id
+    );
+
+  if (exists) {
+
+    setCompareError(
+      "Product already added."
+    );
+
+    return;
+  }
+
+  setSelectedProducts([
+    ...selectedProducts,
+    product,
+  ]);
+};
+
+  // Remove product
+  const removeProduct = (id) => {
+
+    const updatedProducts =
+      selectedProducts.filter(
+        (product) =>
+          product.id !== id
+      );
+
+    setSelectedProducts(
+      updatedProducts
+    );
+  };
+
+  return (
+    <div className="
+      min-h-screen
+      bg-linear-to-r
+      from-blue-100
+      via-white
+      to-purple-100
+      p-6
+    ">
+
+      <div className="
+        max-w-7xl
+        mx-auto
+      ">
+
+        {/* Heading }
+        <h1 className="
+          text-4xl
+          font-bold
+          text-center
+          text-blue-700
+          mb-10
+        ">
+          Product Comparison App
+        </h1>
+
+        {/* Search Bar }
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={
+            setSearchTerm
+          }
+        />
+
+        <CategoryFilter
+  categories={categories}
+  selectedCategory={
+    selectedCategory
+  }
+  setSelectedCategory={
+    setSelectedCategory
+  }
+/>
+
+        {/* Error Message }
+        {/*{error && (
+
+          <p className="
+            text-red-500
+            text-center
+            mb-4
+          ">
+            {error}
+          </p>
+
+        )}}
+
+        {
+          compareError && (
+
+             <div className="
+               bg-red-100
+               text-red-700
+               p-4
+               rounded-lg
+              mb-6
+              text-center
+              font-semibold">
+          {compareError}
+              </div>
+
+          )
+        }
+
+        {/* Loading }
+        {loading ? (
+
+          <div className="
+            text-center
+            text-2xl
+            font-bold
+          ">
+            Loading Products...
+            
+          </div>
+          
+        ) : (
+
+          <>
+            {/* Product Grid }
+            <div className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              lg:grid-cols-3
+              gap-6
+            ">
+
+              {filteredProducts.map(
+                (product) => (
+
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onCompare={
+                      addToCompare
+                    }
+                  />
+
+                )
+              )}
+
+            </div>
+
+            {/* Comparison Table }
+            <ComparisonTable
+              selectedProducts={
+                selectedProducts
+              }
+              removeProduct={
+                removeProduct
+              }
+            />
+          </>
+
+        )}
+
+      </div>
+
+    </div>
+  );
+}
+
+export default App;
