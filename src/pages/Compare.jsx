@@ -11,7 +11,31 @@ function Compare({
   bestProduct,
   setBestProduct,
 }) {
+  // Auto calculate best product
+const autoBestProduct =
+  selectedProducts.length > 0
+    ? selectedProducts.reduce(
+        (best, current) => {
 
+          // Score formula
+          const bestScore =
+            best.rating * 20 +
+            best.discountPercentage * 10 -
+            best.price * 0.05;
+
+          const currentScore =
+            current.rating * 20 +
+            current.discountPercentage * 10 -
+            current.price * 0.05;
+
+          return currentScore >
+            bestScore
+            ? current
+            : best;
+        }
+      )
+    : null;
+  
   const navigate =
     useNavigate();
 
@@ -30,7 +54,73 @@ function Compare({
       >
         Compare Products
       </h1>
+      
+      {
+  autoBestProduct && (
 
+    <div className="
+      bg-purple-100
+      border
+      border-purple-300
+      rounded-2xl
+      p-5
+      mb-8
+      text-center
+      shadow-md
+    ">
+
+      <h2 className="
+        text-2xl
+        font-bold
+        text-purple-700
+      ">
+        Recommended Best Product
+      </h2>
+
+      <p className="
+        text-lg
+        mt-2
+        font-semibold
+      ">
+        {
+          autoBestProduct.title
+        }
+      </p>
+
+      <p className="
+        text-gray-600
+      ">
+        ₹
+        {
+          autoBestProduct.price
+        }
+      </p>
+
+      <button
+        onClick={() =>
+          navigate(
+            `/product/${autoBestProduct.id}`
+          )
+        }
+        className="
+          mt-4
+          bg-purple-600
+          hover:bg-purple-700
+          text-white
+          px-6
+          py-3
+          rounded-xl
+          font-semibold
+        "
+      >
+        View Recommended Product
+      </button>
+
+    </div>
+
+  )
+}
+      
       {selectedProducts.length ===
       0 ? (
 
